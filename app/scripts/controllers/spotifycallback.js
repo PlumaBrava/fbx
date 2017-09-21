@@ -1,0 +1,53 @@
+'use strict';
+
+/**
+ * @ngdoc function
+ * @name fbxApp.controller:SpotifycallbackCtrl
+ * @description
+ * # SpotifycallbackCtrl
+ * Controller of the fbxApp
+ */
+angular.module('fbxApp')
+  .controller('SpotifycallbackCtrl',['$stateParams', '$state','$location', function (stateParams, state,location) {
+    console.log(" potify callback");
+    console.log(" stateParams");
+    console.log(stateParams);
+    console.log(" state");
+    console.log(state.current.name);
+    console.log("location");
+    console.log(location.path());
+     this.tockenvar="ceron var";
+    this.tocken="ceron This";
+    this.error="cero";
+    self=this;
+ console.log("tockenvar "+this.tockenvar);
+ console.log("tocken "+this.tocken);
+ // console.log("tocken "+tocken);
+    window.onload = function () {
+      var hash = window.location.hash;
+      if (window.location.search.substring(1).indexOf("error") !== -1) {
+        console.log("ERROR en Sotify callback");
+        $.allbackId.append('<p>'+error+'</p>');
+        self.error="err";
+        self.tockenvar="err var";
+    self.tocken="err This";
+ console.log("tockenvar "+self.tockenvar);
+ console.log("tocken "+self.tocken);
+        window.close();
+      } else if (hash) {
+        // login success
+        self.tocken = window.location.hash.split('&')[0].split('=')[1];
+        // $.callbackId.append('<p>'+tocken+'</p>');
+
+        self.tockenvar="xx var";
+        self.error="xx error";
+
+     console.log("tockenvar "+self.tockenvar);
+     console.log("this.error "+self.error);
+ console.log("tocken "+self.tocken);
+          console.log("OK Sotify callback " + self.tocken);
+        // localStorage.setItem('spotify-token', "");
+        localStorage.setItem('spotify-token', self.tocken);
+      }
+    }
+  }]);

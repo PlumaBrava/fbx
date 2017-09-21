@@ -8,10 +8,16 @@
  * Controller of the fbxApp
  */
 angular.module('fbxApp')
-  .controller('MainCtrl', function () {
-    this.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma'
-    ];
-  });
+  .controller('MainCtrl', ['$stateParams', '$state', function ($stateParams, $state) {
+
+var msg = new SpeechSynthesisUtterance('Hola Juan');
+window.speechSynthesis.speak(msg);
+
+
+console.log($stateParams);
+console.log('$state');
+console.log($state);
+ console.log('$state.current');
+ console.log($state.current);
+// $state.go('login');
+  }]);

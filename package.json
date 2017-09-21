@@ -39,5 +39,9 @@
   },
   "scripts": {
     "test": "karma start test\\karma.conf.js"
+  },
+  "dependencies": {
+    "howler": "^2.0.4",
+    "mo-js": "^0.288.2"
   }
 }

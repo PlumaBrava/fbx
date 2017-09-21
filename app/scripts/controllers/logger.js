@@ -9,7 +9,7 @@
  */
 angular.module('fbxApp')
 
-  .controller('LoggerCtrl',['firebase', function (firebase) {
+  .controller('LoggerCtrl',['firebase','$state','fb','$localStorage', function (firebase,$state,fb,localStorage) {
 
 // var ref = new Firebase("https://logistica-144918.firebaseio.com");
 // this.data = $firebaseObject(ref);
@@ -42,13 +42,59 @@ angular.module('fbxApp')
 
  console.log(this.ref);
 
+console.log("userKey");
+console.log(localStorage.userKey);
+console.log(localStorage.user);
+
+console.log("empresa");
+console.log(localStorage.empresaKey);
+console.log(localStorage.empresa);
+
+
+    this.play2 =function(){
+          console.log("play2()");
+
+
+
+
+var sound = new Howl({
+      src: ['juan.wav'],
+      format: ['wav'],
+      html5: true
+
+    });
+
+
+
+//     // Clear listener after first call.
+//   sound.once('load', function(){
+//         console.log("once..load");
+//         console.log(sound);
+//     sound.play();
+//   });
+
+// // Fires when the sound finishes playing.
+//     sound.on('end', function(){
+//       console.log('Finished!');
+//       sound.unload();
+//     });
+
+
+
+
+
+    };
+
+ // console.log($state.current);
+
 this.passwordLogin=function(email, password){
+
     console.log("passwordLogin");
     console.log("email "+ email);
     console.log("password "+ password);
-// var email="pepe@gm2ail.com";
-// var password="12341234aa";
-
+   if (fb.isUserLog()){
+       $state.go('productos');
+    }else {
 
 
     this.ref.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
@@ -68,9 +114,10 @@ this.passwordLogin=function(email, password){
     console.log("user uid: "+user.uid);
     // console.log(user);
         self.readUser(user.uid);
-            self.readPerfil(user.uid);
+        self.readPerfil(user.uid);
   }
     });
+  };
 };
 
 
@@ -121,52 +168,98 @@ self.err = null;
 
 this.loginFacebook=function(){
     console.log("clickFacebook ");
+       if (fb.isUserLog()){
+       $state.go('productos');
+    }else {
     var provider = new firebase.auth.FacebookAuthProvider();
     provider.setCustomParameters({
           'display': 'popup'
         });
+        this.ref.auth().signInWithPopup(provider).then(function(result) {
+          // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+          var token = result.credential.accessToken;
+          console.log("token: "+token);
+          // The signed-in user info.
+          var user = result.user;
+          console.log("user: "+user);
+          // ...
+        })
+        .catch(function(error) {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          // The email of the user's account used.
+          var email = error.email;
+          // The firebase.auth.AuthCredential type that was used.
+          var credential = error.credential;
 
-this.ref.auth().signInWithPopup(provider).then(function(result) {
-  // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-  var token = result.credential.accessToken;
-  console.log("token: "+token);
-  // The signed-in user info.
-  var user = result.user;
-  console.log("user: "+user);
-  // ...
-})
-.catch(function(error) {
-  // Handle Errors here.
-  var errorCode = error.code;
-  var errorMessage = error.message;
-  // The email of the user's account used.
-  var email = error.email;
-  // The firebase.auth.AuthCredential type that was used.
-  var credential = error.credential;
-
-    console.log("error: "+errorMessage+"-"+email+credential);
-  // ...
-});
+            console.log("error: "+errorMessage+"-"+email+credential);
+          // ...
+        });
+      };
+};
 
 
+this.loginGoogle=function(){
+    console.log("login Google ");
+    if (fb.isUserLog()){
+       $state.go('productos');
+    }else {
+
+    var provider =new firebase.auth.GoogleAuthProvider();
+    provider.addScope('https://www.googleapis.com/auth/plus.login');
+    provider.setCustomParameters({
+        'login_hint': 'user@example.com'
+        });
+
+
+      this.ref.auth().signInWithPopup(provider).then(function(result) {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        var token = result.credential.accessToken;
+        // The signed-in user info.
+        var user = result.user;
+        console.log("user: "+user.uid);
+        self.readUser(user.uid);
+
+
+        // ...
+      }).catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // The email of the user's account used.
+        var email = error.email;
+        // The firebase.auth.AuthCredential type that was used.
+        var credential = error.credential;
+          console.log("error: "+errorMessage+"-"+email+credential);
+
+        // ...
+      });
+    };
 };
 
 
 
 this.readUser=function(userID){
-  console.log("User function");
+  console.log("readUser");
   // Get a reference to the database service
 var database = firebase.database();
-var ref = database.ref('users/');
+var ref = database.ref('users/'+userID);
 ref.on('value', function(snapshot) {
   console.log("User");
-  console.log(snapshot.val());
+  var u=snapshot.val()
+  console.log(u);
+  fb.setUserKey(userID);
+  fb.setUser(u);
+
+  self.readUserEmpresa(userID);
+
   // updateStarCount(postElement, snapshot.val());
 });
 };
 
 this.readPerfil=function(userID){
-  console.log("Perfil function");
+  console.log("readPerfil");
   // Get a reference to the database service
   var database = firebase.database();
   var ref = database.ref('user-perfil/'+userID);
@@ -177,4 +270,25 @@ this.readPerfil=function(userID){
     });
 };
 
-  }]);
+this.readUserEmpresa=function(userID){
+  console.log("readUserEmpresa");
+  // Get a reference to the database service
+  var database = firebase.database();
+  var ref = database.ref('user-empresa/'+userID);
+  ref.on('value', function(snapshot) {
+     console.log(snapshot.val());
+     snapshot.forEach(function(childSnapshot) {
+      var childKey = childSnapshot.key;
+      var childData = childSnapshot.val();
+      fb.setEmpresaKey(childKey);
+      fb.setEmpresa(childData);
+          $state.go('productos');
+    });
+ });
+}; //end readUserEmpresa
+
+
+
+  }])
+;
+

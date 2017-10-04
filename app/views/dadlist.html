@@ -54,6 +54,11 @@
     <div class="item">imagen {{item.link}}</div>
 </script>
 
+<script type="text/ng-template" id="leer.html">
+    <div class="leer">leer {{item.link}}</div>
+    <div class="texto">{{item.texto}}</div>
+</script>
+
     <div class="nestedDemo row">
 
 <!-- Main area with dropzones and source code -->
@@ -80,6 +85,10 @@
     <div class="toolbox box box-grey box-padding">
         <h3>New Elements</h3>
         <ul>
+
+              <li ng-click="save()" >
+                <button type="button" class="btn btn-default btn-lg" >Save</button>
+            </li>
             <!-- The toolbox only allows to copy objects, not move it. After a new
                  element was created, dnd-copied is invoked and we generate the next id -->
             <li ng-repeat="item in models.templates"

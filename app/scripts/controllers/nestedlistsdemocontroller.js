@@ -15,21 +15,24 @@ angular.module('fbxApp')
   //     'Karma'
   //   ];
   // });
-  .controller("NestedListsDemoController", function($scope) {
+  .controller("NestedListsDemoController", ['$scope','comandos',function($scope,comandos) {
 
     console.log("NestedListsDemoController");
+
+
+
 
     $scope.models = {
         selected: null,
         templates: [
             {type: "item", id: 2},
             {type: "container", id: 1, columns: [[], []]},
-            {type: "bloque", id: 3, columns: [[], [], [], []]},         // bloque de actividades
+            {type: "bloque", id: 3, columns: [[]]},         // bloque de actividades
             {type: "spotify", id: 4, columns: [[], [], [], []]},        // Dipara musica de Spotify
             {type: "audio", id: 5, columns: [[], [], [], []]},          // Reporduce audio
-            {type: "leer", id: 6, columns: [[], [], [], []]},           // Lee un texto
+            {type: "leer", id: 6, texto:"Texto de prueba"},           // Lee un texto
             {type: "imagen", id: 7,link:"url" },                           // Muestra Imagen
-            {type: "tick", id: 8, intervalo_ms: 1000, volumen:1},       // activa el cuenta timpo
+            {type: "tick", id: 8, intervalo_ms: 1000, volumen:1,duracion:6000},       // activa el cuenta timpo
             {type: "cronometo", id: 9, columns: [[], [], [], []]},      // permite medir mi tiempo.
             {type: "registro", id: 10, columns: [[], [], [], []]}        // permite tomar registo de tiempo o cantidades...
         ],
@@ -152,8 +155,32 @@ angular.module('fbxApp')
         }
     };
 
+
+
+var load=function(){
+    console.log("load");
+      console.log(comandos.getModelAsJason());
+if (!comandos.getModelAsJason){
+    console.log("load undefined");
+
+}
+    else{
+    console.log("load no null");
+    console.log(comandos.getModelAsJason);
+    $scope.models.dropzones=    angular.fromJson(comandos.getModelAsJason());
+};
+};
+
+
+load();
+
     $scope.$watch('models.dropzones', function(model) {
         $scope.modelAsJson = angular.toJson(model, true);
     }, true);
 
-});
+$scope.save=function(){
+    console.log("save");
+    comandos.setModelAsJason($scope.modelAsJson);
+};
+
+}]);

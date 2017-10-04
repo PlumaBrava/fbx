@@ -141,6 +141,16 @@ $stateProvider
 //   enabled: true,
 //   requireBase: false
 // });
+
+
+$stateProvider
+.state('practica',{
+    url:'/practica',
+    templateUrl:'views/practica.html',
+    controller:'PracticaCtrl as practica'
+});
+
+
   }])
 
   ;

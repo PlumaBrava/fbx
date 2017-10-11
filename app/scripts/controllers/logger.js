@@ -30,15 +30,15 @@ angular.module('fbxApp')
     var err="";
     var self=this;
 
-  var config = {
-    apiKey: "AIzaSyATFHPOvPIszswYY0tCgJ06rlyQ24WHDCA",
-    authDomain: "logistica-144918.firebaseapp.com",
-    databaseURL: "https://logistica-144918.firebaseio.com",
-    projectId: "logistica-144918",
-    storageBucket: "logistica-144918.appspot.com",
-    messagingSenderId: "378485183737"
-  };
-  this.ref=firebase.initializeApp(config);
+  // var config = {
+  //   apiKey: "AIzaSyATFHPOvPIszswYY0tCgJ06rlyQ24WHDCA",
+  //   authDomain: "logistica-144918.firebaseapp.com",
+  //   databaseURL: "https://logistica-144918.firebaseio.com",
+  //   projectId: "logistica-144918",
+  //   storageBucket: "logistica-144918.appspot.com",
+  //   messagingSenderId: "378485183737"
+  // };
+  // this.ref=firebase.initializeApp(config);
 
  console.log(this.ref);
 

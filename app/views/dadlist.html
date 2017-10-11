@@ -46,17 +46,34 @@
 
 <!-- Template for a normal list item -->
 <script type="text/ng-template" id="tick.html">
-    <div class="item">tick {{item.id}} tiempo  {{item.intervalo_ms}}</div>
+    <div class="leer" ng-click="openTickModal('sm',  item)">
+   <h3>Tick</h3>
+    <p class="texto"><b>Intervalo:</b>{{item.intervalo_ms}} </p>
+    <p class="texto"><b>Volumen:</b>{{item.volumen}} </p>
+    <p class="texto"><b>Duracion:</b>{{item.duracion}} </p>
+<!--     {{item.id}} tiempo  {{item.intervalo_ms}} -->
+</div>
 </script>
 
 <!-- Template for a normal list item -->
 <script type="text/ng-template" id="imagen.html">
-    <div class="item">imagen {{item.link}}</div>
+    <div class="imagen" ng-click="openImagenModal('lg',  item)">
+<h3>Imagen</h3>
+
+                    <img class="imagenx" ng-src="{{item.link}}" alt="Seleccione Imagen" />
+                    <p ng-hide="item.name==''">{{item.name}}</p>
+
+
+
+
+    </div>
 </script>
 
 <script type="text/ng-template" id="leer.html">
-    <div class="leer">leer {{item.link}}</div>
-    <div class="texto">{{item.texto}}</div>
+    <div class="leer" ng-click="open('sm', 'false', item)">
+        <h3>Leer</h3>
+    <p class="texto">{{item.texto}}</p>
+    </div>
 </script>
 
     <div class="nestedDemo row">

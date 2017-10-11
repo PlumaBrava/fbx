@@ -15,23 +15,23 @@ angular.module('fbxApp')
   //     'Karma'
   //   ];
   // });
-  .controller("NestedListsDemoController", ['$scope','comandos',function($scope,comandos) {
+  .controller("NestedListsDemoController", ['$scope','comandos','$uibModal',function($scope,comandos,$uibModal) {
 
     console.log("NestedListsDemoController");
 
 
-
+    var self=this;
 
     $scope.models = {
         selected: null,
         templates: [
             {type: "item", id: 2},
             {type: "container", id: 1, columns: [[], []]},
-            {type: "bloque", id: 3, columns: [[]]},         // bloque de actividades
+            {type: "bloque", id: 3, columns: [[],[],[]]},         // bloque de actividades
             {type: "spotify", id: 4, columns: [[], [], [], []]},        // Dipara musica de Spotify
             {type: "audio", id: 5, columns: [[], [], [], []]},          // Reporduce audio
             {type: "leer", id: 6, texto:"Texto de prueba"},           // Lee un texto
-            {type: "imagen", id: 7,link:"url" },                           // Muestra Imagen
+            {type: "imagen", id: 7,link:"url",name:""  },                           // Muestra Imagen
             {type: "tick", id: 8, intervalo_ms: 1000, volumen:1,duracion:6000},       // activa el cuenta timpo
             {type: "cronometo", id: 9, columns: [[], [], [], []]},      // permite medir mi tiempo.
             {type: "registro", id: 10, columns: [[], [], [], []]}        // permite tomar registo de tiempo o cantidades...
@@ -79,6 +79,8 @@ angular.module('fbxApp')
                     "type": "item",
                     "id": 7
                 }]
+
+
                 // ,
             //     {
             //         "type": "item",
@@ -183,4 +185,236 @@ $scope.save=function(){
     comandos.setModelAsJason($scope.modelAsJson);
 };
 
+  this.items = ['item1', 'item2', 'item3'];
+  this.selected ={
+    item: this.items[2]
+  };
+  this.animationsEnabled = true;
+
+
+
+ $scope.open = function (size, parentSelector,item) {
+
+    var parentElem = undefined;
+    // var parentElem = parentSelector ?
+    //   angular.element($document[0].querySelector('.modal-demo ' + parentSelector)) : undefined;
+    var modalInstance = $uibModal.open({
+      animation: $scope.animationsEnabled,
+      ariaLabelledBy: 'modal-title',
+      ariaDescribedBy: 'modal-body',
+      // bindToController:true,
+      templateUrl: 'views/modal_leer.html',
+      controller: 'ModalInstanceCtrl',
+      controllerAs: '$ctrl',
+      size: size,
+      appendTo: parentElem,
+      resolve: {
+        items: function () {
+          return   self.items;
+        },
+        item:function(){
+            return item;
+        }
+      }
+    });
+
+    modalInstance.result.then(function (returnedItem) {
+
+
+        console.log("return:"+returnedItem);
+        console.log(returnedItem);
+        console.log(item);
+
+        item.texto=returnedItem;
+
+    }, function () {
+
+        console.log("return dismissed:");
+      // $log.info('Modal dismissed at: ' + new Date());
+    });
+  };
+
+$scope.openTickModal = function (size, item) {
+
+    var parentElem = undefined;
+
+    var modalInstance = $uibModal.open({
+      animation: $scope.animationsEnabled,
+      ariaLabelledBy: 'modal-title',
+      ariaDescribedBy: 'modal-body',
+
+      templateUrl: 'views/modal_tick.html',
+      controller: 'ModalInstanceTick',
+      controllerAs: '$ctrl',
+      size: size,
+      appendTo: parentElem,
+      resolve: {
+
+        item:function(){
+            return item;
+        }
+      }
+    });
+
+    modalInstance.result.then(function (returnedItem) {
+
+
+        console.log("return:"+returnedItem);
+        console.log(returnedItem);
+        console.log(item);
+
+
+        // item.texto=returnedItem;
+        item.intervalo_ms = returnedItem.intervalo_ms,
+        item.volumen = returnedItem.volumen,
+        item.duracion = returnedItem.duracion
+
+
+    }, function () {
+
+        console.log("return dismissed:");
+      // $log.info('Modal dismissed at: ' + new Date());
+    });
+  };
+
+$scope.openImagenModal = function (size, item) {
+
+    var parentElem = undefined;
+
+    var modalInstance = $uibModal.open({
+      animation: $scope.animationsEnabled,
+      ariaLabelledBy: 'modal-title',
+      ariaDescribedBy: 'modal-body',
+
+      templateUrl: 'views/modal_imagen.html',
+      controller: 'ModalInstanceImagen',
+      controllerAs: '$ctrl',
+      size: size,
+      appendTo: parentElem,
+      resolve: {
+
+        item:function(){
+            return item;
+        }
+      }
+    });
+
+    modalInstance.result.then(function (returnedItem) {
+
+        item.link  = returnedItem.link;
+        item.name  = returnedItem.name;
+
+
+    }, function () {
+
+        console.log("return dismissed:");
+
+    });
+  };
+
+}])
+
+.controller('ModalInstanceCtrl', function ($uibModalInstance, items, item) {
+  var $ctrl = this;
+  $ctrl.itemq = item.texto;
+  $ctrl.items = items;
+  $ctrl.selected = {
+    item: $ctrl.items[0]
+  };
+console.log("$uibModalInstance" );
+console.log(items );
+console.log($uibModalInstance );
+console.log($ctrl );
+  this.ok = function () {
+     console.log("uibModalInstance.ok: " );
+    $uibModalInstance.close($ctrl.itemq);
+  };
+
+  $ctrl.cancel = function () {
+     console.log("uibModalInstance.cancel: " );
+    $uibModalInstance.dismiss('cancel');
+  };
+})
+.controller('ModalInstanceTick', function ($uibModalInstance,  item) {
+  var $ctrl = this;
+     // {type: "tick", id: 8, intervalo_ms: 1000, volumen:1,duracion:6000},       // activa el cuenta timpo
+
+  $ctrl.itemq = {
+
+    intervalo_ms : item.intervalo_ms,
+    volumen : item.volumen,
+    duracion : item.duracion
+  };
+console.log("$uibModalInstance" );
+console.log(item );
+console.log($uibModalInstance );
+console.log($ctrl );
+  this.ok = function () {
+     console.log("uibModalInstance.ok: " );
+    $uibModalInstance.close($ctrl.itemq);
+  };
+
+  $ctrl.cancel = function () {
+     console.log("uibModalInstance.cancel: " );
+    $uibModalInstance.dismiss('cancel');
+  }
+})
+
+  .controller('ModalInstanceImagen',["$scope","$uibModalInstance","item", "subirImagenFb", function ($scope, $uibModalInstance,  item,subirImagenFb) {
+
+ console.log("ModalInstanceImagen");
+  var $ctrl = this;
+ $scope.imageSrc=item.link;
+ $scope.name=item.name;
+ $scope.okdisponible=false;
+
+ $ctrl.itemq = {
+
+    link : item.link,
+    name: item.name
+
+  };
+
+    $scope.getFile = function () {
+        $scope.progress = 0;
+
+
+        subirImagenFb.subirUrl($scope.file, $scope)
+                      .then(function(result) {
+                        console.log("result Imagen");
+                        console.log(result);
+                          $scope.imageSrc = result.downloadURL;
+                          $ctrl.itemq = {
+                                link :result.downloadURL,
+                                name:result.metadata.name
+                              };
+                          $scope.okdisponible=true;
+                      },function(result) {
+                      console.log("error Imagen");
+                      console.log(result);
+                      });
+    };
+
+    $scope.$on("fileProgress", function(e, progress) {
+
+        $scope.progress = progress.loaded / progress.total;
+
+    });
+
+
+  this.ok = function () {
+     console.log("uibModalInstance.ok: " );
+    $uibModalInstance.close($ctrl.itemq);
+  };
+
+  $ctrl.cancel = function () {
+     console.log("uibModalInstance.cancel: " );
+    $uibModalInstance.dismiss('cancel');
+  };
+
+ $ctrl.fileToUpload = null;
+   $ctrl.onChange = function onChange(fileList) {
+    $ctrl.fileToUpload = fileList[0];};
+
 }]);
+

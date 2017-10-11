@@ -8,13 +8,62 @@
  * Service in the fbxApp.
  */
 angular.module('fbxApp')
-  .service('fb',['$localStorage', function (localStorage) {
+  .service('fb',['$localStorage','firebase','$firebaseStorage', function (localStorage,firebase,$firebaseStorage) {
     // AngularJS will instantiate a singleton by calling "new" on this function
     var self=this;
     this.userKey;
     this.user;
     this.empresaKey;
     this.empresa;
+
+
+    var config = {
+    apiKey: "AIzaSyATFHPOvPIszswYY0tCgJ06rlyQ24WHDCA",
+    authDomain: "logistica-144918.firebaseapp.com",
+    databaseURL: "https://logistica-144918.firebaseio.com",
+    projectId: "logistica-144918",
+    storageBucket: "logistica-144918.appspot.com",
+    messagingSenderId: "378485183737"
+  };
+
+  this.ref=firebase.initializeApp(config);
+
+  this.getRefFB=function(){
+    return self.ref;
+  };
+
+this.modal_imagen_scope=null;
+  this.getStorageRef= function (s,img) {
+    self.modal_imagen_scope=s;
+  // create a Storage reference for the $firebaseStorage binding
+  var storageRef = firebase.storage().ref("practica/"+img.name);
+  console.log("getStorageRef");
+
+  // Child references can also take paths delimited by '/'
+  // var spaceRef = storageRef.child(img.name);
+  var storage = $firebaseStorage(storageRef);
+  console.log(storageRef);
+  console.log(storage.$getDownloadURL());
+  // var file = // get a file from the template (see Retrieving files from template section below)
+  storage.$getDownloadURL().then(function(url) {
+    console.log(url);
+     self.modal_imagen_scope.setURL(url);
+  // $scope.setURL(url);
+});
+  var uploadTask = storage.$put(img);
+  uploadTask.$progress(function(snapshot) {
+  var percentUploaded = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+  console.log(percentUploaded);
+});
+uploadTask.$complete(function(snapshot) {
+  console.log(snapshot.downloadURL);
+});
+uploadTask.$error(function(error) {
+  console.error(error);
+});
+return storage.$getDownloadURL();
+};
+// https://firebasestorage.googleapis.com/v0/b/logistica-144918.appspot.com/o/practica%2Fyeoman.png?alt=media&token=8ebc2253-0947-498c-adbb-6d468d037f34
 
     this.setUserKey=function(key){
          console.log('fb-user key');

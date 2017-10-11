@@ -13,7 +13,7 @@
 
   angular
   // .module('fbxApp', ['ui.router','firebase', 'ngStorage','spotify', 'angularAudioRecorder', 'ui.bootstrap', 'dndLists'])
-  .module('fbxApp', ['ui.router','firebase', 'ngStorage','spotify', 'angularAudioRecorder', 'dndLists'])
+  .module('fbxApp', ['ui.router','firebase', 'ngStorage','spotify', 'angularAudioRecorder', 'dndLists','ui.bootstrap'])
   // .config(['recorderServiceProvider', function(recorderServiceProvider){
   //       //configure here
   //     }]);

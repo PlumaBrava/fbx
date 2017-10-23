@@ -9,26 +9,26 @@
  */
 angular.module('fbxApp')
   .factory('subirImagenFb',["$q", "$log",'fb','$firebaseStorage', function ($q,$log,fb,$firebaseStorage) {
-     var $complete = function(uploadTask, deferred, scope) {
-      console.log( "$complete");
-      console.log( uploadTask.$complete);
-            return function () {
-                scope.$apply(function () {
-                    deferred.resolve(uploadTask.$complete);
-                });
-            };
-        };
+     // var $complete = function(uploadTask, deferred, scope) {
+     //  console.log( "$complete");
+     //  console.log( uploadTask.$complete);
+     //        return function () {
+     //            scope.$apply(function () {
+     //                deferred.resolve(uploadTask.$complete);
+     //            });
+     //        };
+     //    };
      var self=this;
-        var $error = function (uploadTask, deferred, scope) {
-          console.log( "$error");
-          console.log( uploadTask.$error);
+        // var $error = function (uploadTask, deferred, scope) {
+        //   console.log( "$error");
+        //   console.log( uploadTask.$error);
 
-            return function () {
-                scope.$apply(function () {
-                    deferred.reject(uploadTask.$error);
-                });
-            };
-        };
+        //     return function () {
+        //         scope.$apply(function () {
+        //             deferred.reject(uploadTask.$error);
+        //         });
+        //     };
+        // };
 
 
 
@@ -53,7 +53,7 @@ angular.module('fbxApp')
 
  this.modal_imagen_scope=null
  this.deferred=null;
-        var subirUrl = function (file, scope) {
+        var subirUrl = function (file, scope,path) {
           // fb.getRefFB
             self.deferred = $q.defer();
             // var uploadTask = getUploadTask(deferred, scope);
@@ -65,7 +65,9 @@ angular.module('fbxApp')
 
  self.modal_imagen_scope=scope;
   // create a Storage reference for the $firebaseStorage binding
-  var storageRef = firebase.storage().ref("practica/"+file.name);
+  console.log("path+'/'+fb.getUserKey+'/'+file.name");
+  console.log(path+'/'+fb.getUserKey()+'/'+file.name);
+  var storageRef = firebase.storage().ref(path+'/'+fb.getUserKey()+'/'+file.name);
   var storage = $firebaseStorage(storageRef);
 
 //   storage.$getDownloadURL().then(function(url) {

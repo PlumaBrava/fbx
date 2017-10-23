@@ -76,6 +76,20 @@
     </div>
 </script>
 
+
+<!-- Template for a normal list item -->
+<script type="text/ng-template" id="audio.html">
+    <div class="leer" ng-click="openAudioModal('lg',  item)">
+   <h3>Audio</h3>
+    <p class="texto"><b>link:</b>{{item.link}} </p>
+    <p class="texto"><b>name:</b>{{item.name}} </p>
+    <p class="texto"><b>Duracion:</b>{{item.duracion}} </p>
+<!--     {{item.id}} tiempo  {{item.intervalo_ms}} -->
+</div>
+</script>
+
+
+
     <div class="nestedDemo row">
 
 <!-- Main area with dropzones and source code -->

@@ -101,13 +101,20 @@ return storage.$getDownloadURL();
 
 
   this.getUserKey=function(){
-         console.log('gettUserKey'+self.userKey);
+         console.log('gettUserKey:'+self.userKey);
+            if(this.isUserLog){
+          return localStorage.userKey;
+        }
+        else{
        return self.userKey;
+        };
     };
 
     this.getUser=function(){
         console.log('getUser');
+
       return   self.user;
+
     };
 
     this.getEmpresaKey=function(){

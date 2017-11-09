@@ -26,14 +26,15 @@
     <button ng-click="recorder.stopRecord()" type="button" ng-disabled="recorder.status.isRecording === false">
         Stop Record
     </button>
+    {{recorder.elapsedTime}}
     <button ng-click="recorder.playbackRecording()" type="button"
             ng-disabled="recorder.status.isRecording || !recorder.audioModel">
         Play Back
     </button>
-    <button ng-click="recordedInputa.f1()" >f1</button>
+<!--     <button ng-click="recordedInputa.f1()" >f1</button> -->
 
-    <button ng-click="recorder.save()" >
-    <!-- ng-disabled="recorder.status.isRecording || !recorder.audioModel"> -->
+    <button ng-click="recorder.save()"
+    ng-disabled="recorder.status.isRecording || !recorder.audioModel">
                 Download
             </button>
   </div>
@@ -43,8 +44,8 @@
   </div>
   <!-- End controls-->
 </ng-audio-recorder>
-   <button ng-click="$ctrl.f1(recordedInputjj)"  >f1</button>
-   <button ng-click="$ctrl.ok()"  >f21</button>
+   <button ng-click="$ctrl.f1(recordedInputjj)"  >save</button>
+   <!-- <button ng-click="$ctrl.ok()"  >f21</button> -->
 
 
 

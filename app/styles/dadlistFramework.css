@@ -76,6 +76,7 @@
 
 .box-orange {
     border-color: #FF6A00;
+
 }
 
 .box-orange > h3 {
@@ -85,3 +86,22 @@
     background-image: -webkit-linear-gradient(top,#ff6a00 0,#faf2cc 100%);
     background-image: linear-gradient(to bottom,#FF6A00 0,#faf2cc 100%);
 }
+
+ .box-orange .leer {
+    float: left;
+ }
+  .box-orange .item{
+    float: left;
+ }
+
+  .box-orange .box-orange{
+    float: left;
+ }
+
+  .box-orange .box-blue{
+    float: left;
+ }
+
+   .box-orange .imagen{
+    float: left;
+ }

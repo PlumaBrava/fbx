@@ -41,7 +41,8 @@ this.execute=function(){
      // this.valoresGlobal=JSON.parse(this.getModelAsJason());
     // this.listaPropiedades(JSON.parse(this.getModelAsJason(),0));
     self.leerJsonToArray(JSON.parse(this.getModelAsJason()));
-    self.ejecutaSiguiente(0);
+    self.ejecutar(self.arr[0]);
+    // self.ejecutaSiguiente(0);
 };
 
 this.leerJsonToArray=function(obj){
@@ -117,20 +118,51 @@ this.indiceBloques=[0];
 
 
 this.paralelos=[];
+this.arrBackup=[];
+
+this.ejecutar=function(obj){
+
+ console.log('ejecutar:');
+      console.log(obj);
+            console.log(this.arr[0]);
+      // this.indiceNivel = level || 0;
+
+       console.log("length: "+this.arr[0].length);
+      console.log("indiceNivel: "+this.indiceNivel);
+       console.log("indiceEjecucion: "+this.indiceEjecucion[this.indiceNivel]);
+
+
+      if (this.indiceEjecucion[this.indiceNivel]<this.arr[0].length){
+            console.log(this.arr[0][this.indiceEjecucion[this.indiceNivel]]);
+            console.log(this.arr[0][this.indiceEjecucion[this.indiceNivel]].type);
+        if(  this.arr[0][this.indiceEjecucion[this.indiceNivel]].type=="container"){
+          self.arrBackup[this.indiceNivel]=obj;
+          self.indiceNivel++;
+          self.indiceEjecucion[self.indiceNivel]=0;
+          self.ejecutar(obj.columns[0]);
+        }else{
+        self.play(this.arr[0][this.indiceEjecucion[this.indiceNivel]]);
+        // self.nextItemRaiz()
+        };
+
+
+    };
+};
+
 
   this.ejecutaSiguiente=function (level) {
       console.log('ejecutaSiguiente level:'+level);
 
-      console.log(this.arr);
+      console.log(this.arr[0]);
       this.indiceNivel = level || 0;
 
        console.log("length: "+this.arr[0].length);
        console.log("indiceEjecucion: "+this.indiceEjecucion[this.indiceNivel]);
        console.log("indiceNivel: "+this.indiceNivel);
       if (this.indiceEjecucion[this.indiceNivel]<this.arr[0].length){
-           console.log(this.arr[0][this.indiceEjecucion[this.indiceNivel]]);
-        console.log(this.arr[0][this.indiceEjecucion[this.indiceNivel]].type);
-        if(  this.arr[0][this.indiceEjecucion[this.indiceNivel]].type=="bloque"){
+            console.log(this.arr[0][this.indiceEjecucion[this.indiceNivel]]);
+            console.log(this.arr[0][this.indiceEjecucion[this.indiceNivel]].type);
+        if(  this.arr[0][this.indiceEjecucion[this.indiceNivel]].type=="container"){
           self.indiceNivel++;
           self.indiceEjecucion[self.indiceNivel]=0;
           self.bloque[self.indiceNivel]=self.arr[0][self.indiceEjecucion[self.indiceNivel-1]];

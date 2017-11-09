@@ -11,11 +11,43 @@ angular.module('fbxApp')
 .config(function (SpotifyProvider) {
      console.log("Spotify");
      console.log(SpotifyProvider);
+
+
+/*
+    Configuracion de Spotify para respnder a consultas.
+
+    1) configuración de Console de Spotify
+
+     https://developer.spotify.com/my-applications/  (console de Spotify)
+
+     Website : de donde nos conectamos para solicitar información
+          desarrollo:http://localhost:9000/#!/productos
+          web: www.mabecar.com
+
+    Redirect URIs: a donde dirige el callback con el token para poder acceder a Spotiy
+          desarrollo:http://localhost:9000/#!/spotifycallback/
+          web: http://mabecar.com/#!/spotifycallback/
+
+    2) configurar Spotfy provider para hacer las solicitudes a la Spotify
+
+      SetRedirectUri()
+         desarrollo: SpotifyProvider.setRedirectUri('http://localhost:9000/#!/spotifycallback/');
+         web: SpotifyProvider.setRedirectUri('http://mabecar.com/#!/spotifycallback/');
+
+      SetClientId() Colocar el cliente que se obtiene de console.
+      setScope    Se especifica que información estaremos solicitando.
+
+*/
+
+
+
   SpotifyProvider.setClientId('3e2c31f33d594af695b1edcbe39a3e40');
-  SpotifyProvider.setRedirectUri('http://mabecar.com/#!/spotifycallback/');
+  // SpotifyProvider.setRedirectUri('http://mabecar.com/#!/spotifycallback/');
+  SpotifyProvider.setRedirectUri('http://localhost:9000/#!/spotifycallback/');
   // SpotifyProvider.setScope('user-modify-playback-state user-read-private playlist-read-private playlist-modify-private playlist-modify-publicuser-read-private playlist-read-private playlist-modify-private playlist-modify-public');
   // SpotifyProvider.setScope('user-modify-playback-state');
-  SpotifyProvider.setScope('user-read-email streaming user-modify-playback-state user-read-playback-state user-read-recently-played');
+  SpotifyProvider.setScope('user-read-email streaming user-modify-playback-state user-read-playback-state user-read-recently-played playlist-read-private user-read-private user-read-email user-read-birthdate');
+
 
   // If you already have an auth token
   // SpotifyProvider.setAuthToken('BQAQibVONBSdf0DUumNBDN96x0rnypUGwFs2PMviXcbQYIk_1lAIJq5IhV7pMC1NVTDVhORVXIO_Dc_UbfeAkY5eck0HLHDWVzRhVnd46KaZlYjKlPFeNmGWLXOqt_YXjGCP54Q9i0P1sv-qBN0sgRsY2s6nzkbjX2mZ5yz-CJ-aSi6RdZ9RO_zcsuhemIgViBH5vV1F7w7WXCGnSv8r110cTkEUHCcMkDUGtk3-OmMPX3MZlzBIJu-Aq8c8msvi_3sIjIQwfSKzLkG5UOtQxL');
@@ -364,7 +396,17 @@ this.setResult=function(data){
 
 // });
 // self.searchResult=data.albums.items;
-this.items=data.data.albums.items;
+//Albums
+// this.items=data.data.albums.items;
+// Playlist
+// this.items=data.data.playlists.items;
+// Artist
+
+
+
+this.items=data.data.artists.items;
+// traks- no tienen imagenes... se podrian utilizar las de su album.
+// this.items=data.data.tracks.items;
 }
 
 this.playAlbum=function(albumUri){
@@ -400,10 +442,11 @@ $http(req).then(function (response) {
 
 this.buscar=function(buscarTexto){
    // search: function (q, type, options) {
-    Spotify.search(buscarTexto,"album,artist,track,playlist",{"limit":10}).then(function(data){
+    // Spotify.search(buscarTexto,"album,artist,track,playlist",{"limit":10}).then(function(data){
+    Spotify.search(buscarTexto,"artist",{"limit":50}).then(function(data){
   console.log("search ok");
   var dataObj= angular.fromJson(data);
-    console.log("href "+dataObj.data.albums.items[0].name);
+    // console.log("href "+dataObj.data.albums.items[0].name);
     console.log(dataObj);
     self.setResult(angular.fromJson(data));
     }, function (error) {

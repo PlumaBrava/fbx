@@ -5,25 +5,45 @@
      assigned to it. If an element was dragged away, you have to remove
      it from the original list yourself using the dnd-moved attribute -->
 
+   <!-- dnd-dragover="dragoverCallback(index, external, type, callback)"
+        dnd-drop="dropCallback(event,index, item, external, type,list)"
+    dnd-inserted="dropCallback(event,index, item, external, type,list)"
+    -->
+
 <script type="text/ng-template" id="list.html">
-    <ul dnd-list="list">
+    <ul dnd-list="list"
+
+    dnd-inserted="dropCallback(event,index, item, external, type,list)"
+
+    >
         <li ng-repeat="item in list"
+
             dnd-draggable="item"
             dnd-effect-allowed="move"
+            dnd-type="item.type"
             dnd-moved="list.splice($index, 1)"
             dnd-selected="models.selected = item"
+
             ng-class="{selected: models.selected === item}"
-            ng-include="item.type + '.html'">
+            ng-include="item.type + '.html'"
+                >
         </li>
     </ul>
 </script>
 
 <!-- This template is responsible for rendering a Bloque. It uses
      the above list template to render each container column -->
+
+<!--  Usaremos este elemento para agrupar actividades que se ejecuten en paralelo.
+        Se disparan todas juntas
+        Su duración sera la duración del comonente que mas dure, del mas largo.
+     -->
+
 <script type="text/ng-template" id="bloque.html">
-    <div class="container-element box box-orange">
-        <h3>Bloque {{item.id}}</h3>
-        <div class="column" ng-repeat="list in item.columns" ng-include="'list.html'"></div>
+    <div class="container-element box box-orange"
+  >
+        <h3>Bloque {{item.nombre}}- Duracion: {{item.duracion}}</h3>
+        <div class="column" ng-repeat="list in item.columns" ng-include="'list.html'"  ></div>
         <div class="clearfix"></div>
     </div>
 </script>
@@ -31,9 +51,14 @@
 
 <!-- This template is responsible for rendering a container element. It uses
      the above list template to render each container column -->
+<!--  Usaremos este elemento para agrupar actividades que se ejecuten secuencialmente
+        una despues de la otra.
+        Su duración sera la suma de los tiempos de cada uno de sus componentes.
+     -->
 <script type="text/ng-template" id="container.html">
-    <div class="container-element box box-blue">
-        <h3>Container {{item.id}}</h3>
+    <div class="container-element box box-blue"
+     >
+        <h3>Container {{item.id}} - Duracion: {{item.duracion}}</h3>
         <div class="column" ng-repeat="list in item.columns" ng-include="'list.html'"></div>
         <div class="clearfix"></div>
     </div>
@@ -48,6 +73,17 @@
 <script type="text/ng-template" id="tick.html">
     <div class="leer" ng-click="openTickModal('sm',  item)">
    <h3>Tick</h3>
+    <p class="texto"><b>Intervalo:</b>{{item.intervalo_ms}} </p>
+    <p class="texto"><b>Volumen:</b>{{item.volumen}} </p>
+    <p class="texto"><b>Duracion:</b>{{item.duracion}} </p>
+<!--     {{item.id}} tiempo  {{item.intervalo_ms}} -->
+</div>
+</script>
+
+<!-- Template for a normal list item -->
+<script type="text/ng-template" id="cronometro.html">
+    <div class="leer" ng-click="openTickModal('sm',  item)">
+   <h3>Cronometro</h3>
     <p class="texto"><b>Intervalo:</b>{{item.intervalo_ms}} </p>
     <p class="texto"><b>Volumen:</b>{{item.volumen}} </p>
     <p class="texto"><b>Duracion:</b>{{item.duracion}} </p>
@@ -84,11 +120,21 @@
     <p class="texto"><b>link:</b>{{item.link}} </p>
     <p class="texto"><b>name:</b>{{item.name}} </p>
     <p class="texto"><b>Duracion:</b>{{item.duracion}} </p>
-<!--     {{item.id}} tiempo  {{item.intervalo_ms}} -->
+
 </div>
 </script>
 
+<!-- Template for a normal list item -->
+<script type="text/ng-template" id="spotify.html">
+    <div class="leer" ng-click="openSpotifyModal('lg',  item)">
+   <h3>Spotify</h3>
+ <!--    <p class="texto"><b>search:</b>{{item.search}} </p> -->
+    <p class="texto"><b>volumen:</b>{{item.volumen}} </p>
+    <p class="texto"><b>Duracion:</b>{{item.duracion}} </p>
+    <p class="texto"><b>Cantidad Items:</b>{{item.tracks.length}} </p>
 
+</div>
+</script>
 
     <div class="nestedDemo row">
 
@@ -126,13 +172,17 @@
                 dnd-draggable="item"
                 dnd-effect-allowed="copy"
                 dnd-copied="item.id = item.id + 1"
+                 dnd-dragstart="onDragstart(list, event)"
+                  dnd-type="item.type"
                 >
                 <button type="button" class="btn btn-default btn-lg" disabled="disabled">{{item.type}}</button>
             </li>
         </ul>
     </div>
 
-    <div ng-if="models.selected" class="box box-grey box-padding">
+    <div ng-if="models.selected" class="box box-grey box-padding"
+     dnd-draggable="models.selected"
+                dnd-effect-allowed="copy">
         <h3>Selected</h3>
         <strong>Type: </strong> {{models.selected.type}}<br>
         <input type="text" ng-model="models.selected.id" class="form-control" style="margin-top: 5px" />

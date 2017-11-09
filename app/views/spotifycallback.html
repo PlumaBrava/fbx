@@ -1,36 +1,9 @@
-<!-- <!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title></title>
-  <script>
-  var token;
-  var error="cero";
-    window.onload = function () {
-      var hash = window.location.hash;
-      if (window.location.search.substring(1).indexOf("error") !== -1) {
-        console.log("ERROR en Sotify callback");
-        $.allbackId.append('<p>'+error+'</p>');
-        this.error="err";
-        window.close();
-      } else if (hash) {
-        // login success
-        this.token = window.location.hash.split('&')[0].split('=')[1];
-        $.allbackId.append('<p>'+tocken+'</p>');
-          console.log("OK Sotify callback " + this.token);
-        localStorage.setItem('spotify-token', this.token);
-      }
-    }
-  </script>
-</head>
-<body> -->
+
   <div class="container" ng-controller="SpotifycallbackCtrl as sp">
   <!-- <div class="container" > -->
-<p id="callbackId"> Esta es Soptofy Callback</p>
+<p id="callbackId">Soptofy Callback</p>
 <p> Errorvar {{sp.tockenvar}}</p>
 <p> Error {{sp.error}}</p>
 <p> tocken: {{sp.tocken}} -</p>
 </div>
-<!-- </body>
-</html> -->
+

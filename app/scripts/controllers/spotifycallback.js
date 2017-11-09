@@ -1,12 +1,17 @@
 'use strict';
 
-/**
- * @ngdoc function
- * @name fbxApp.controller:SpotifycallbackCtrl
- * @description
- * # SpotifycallbackCtrl
- * Controller of the fbxApp
- */
+/*
+
+Recibe el callback de spotify.
+
+La información llega en el Url la revisa y extrae el tocken que se necesita para consultar spotify
+
+Si hay un error lo muestra, de lo contrario cierra la ventana y graba localmente ek tocken.
+
+
+*/
+
+
 angular.module('fbxApp')
   .controller('SpotifycallbackCtrl',['$stateParams', '$state','$location', function (stateParams, state,location) {
     console.log(" potify callback");
@@ -22,7 +27,7 @@ angular.module('fbxApp')
     self=this;
  console.log("tockenvar "+this.tockenvar);
  console.log("tocken "+this.tocken);
- // console.log("tocken "+tocken);
+
     window.onload = function () {
       var hash = window.location.hash;
       if (window.location.search.substring(1).indexOf("error") !== -1) {

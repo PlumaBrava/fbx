@@ -31,9 +31,10 @@ module.exports = function(config) {
       'bower_components/wavesurfer.js/dist/wavesurfer.min.js',
       'bower_components/angularAudioRecorder/dist/angular-audio-recorder.min.js',
       'bower_components/howler.js/dist/howler.js',
-      'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
       'bower_components/angular-drag-and-drop-lists/angular-drag-and-drop-lists.js',
-      'bower_components/mojs/build/mo.min.js',
+      'bower_components/p5.js/lib/p5.min.js',
+      'bower_components/angular-p5/angular-p5.js',
+      'bower_components/angular-bootstrap1/ui-bootstrap-tpls.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       'app/scripts/**/*.js',

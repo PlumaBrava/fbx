@@ -1,16 +1,10 @@
 'use strict';
 
 /*
-
 Recibe el callback de spotify.
-
 La información llega en el Url la revisa y extrae el tocken que se necesita para consultar spotify
-
 Si hay un error lo muestra, de lo contrario cierra la ventana y graba localmente ek tocken.
-
-
 */
-
 
 angular.module('fbxApp')
   .controller('SpotifycallbackCtrl',['$stateParams', '$state','$location', function (stateParams, state,location) {
@@ -24,7 +18,7 @@ angular.module('fbxApp')
      this.tockenvar="ceron var";
     this.tocken="ceron This";
     this.error="cero";
-    self=this;
+    var self=this;
  console.log("tockenvar "+this.tockenvar);
  console.log("tocken "+this.tocken);
 

@@ -6,9 +6,11 @@
   <p>
     <button  class="btn btn-primary" ng-click="login.loginFacebook()">Facebook</button>
     <button  class="btn btn-primary" ng-click="login.loginGoogle()">Google</button>
-    <button  class="btn btn-primary" ng-click="login.play2()">play2</button>
+
   </p>
 </fieldset>
+<!-- <p ng-show="err" class="bg-danger">{{err}}</p> -->
+<p class="bg-danger">{{err}}</p>
 
 <form role="form">
   <p class="form-group">
@@ -32,5 +34,5 @@
     <button  class="btn btn-default" ng-cloak ng-show="createMode" ng-click="createMode = false">Cancel</button>
   </p>
 </form>
-<p ng-show="login.err" class="bg-danger">{{login.err}}</p>
+
 

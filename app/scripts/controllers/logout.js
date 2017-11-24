@@ -8,7 +8,7 @@
  * Controller of the fbxApp
  */
 angular.module('fbxApp')
-  .controller('LogoutCtrl',['$localStorage', function (localStorage) {
+  .controller('LogoutCtrl',['$localStorage','$state', function (localStorage,$state) {
 
 
   this.logOut=function(){
@@ -33,6 +33,6 @@ console.log(localStorage.user);
 console.log("empresa");
 console.log(localStorage.empresaKey);
 console.log(localStorage.empresa);
-
+$state.go('login');
 };
   }]);

@@ -1,0 +1,24 @@
+<p>This is the MisPracticas view.</p>
+<!-- <p>{{mispracticas}}</p> -->
+<!-- <p>--{{lista}}</p> -->
+
+ <button ng-click="crearPractiva()">Crear Nueva</button>
+    <div class="table table-hover table-bordered" ng-show="lista" >
+
+        <div class="item-container row list-item" ng-repeat="practica in lista" >
+         <!-- <div class="col-sm-4"><img ng-src="{{practica.nombre}}" alt="producto"></div> -->
+            <div class="col-sm-8">
+                <p>nombre: {{practica.nombre}}  </p>
+                <p>descripcion: {{practica.descripcion}}</p>
+                <p>Usuario Creador: {{practica.usuarioCreador}}</p>
+                <p>Fecha Creacion: {{practica.fechaCreacion}}</p>
+                <p>Tipo: {{practica.publica ? "publica": "privada"}} </p>
+                <p>Duracion: {{practica.duracion}} </p>
+
+                <p>userKey: {{practica.userKey}}</p>
+
+                <button ng-click="configurar(practica)">modificar</button>
+            </div>
+
+    </div>
+    </div>

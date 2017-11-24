@@ -16,14 +16,39 @@ angular.module('fbxApp')
     this.empresaKey;
     this.empresa;
 
+// <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
+// <script>
+//   // Initialize Firebase
+//   var config = {
+//     apiKey: "AIzaSyDvIgZ8FpDoSTJuSbHl8VJH0zacuN4Z_Fk",
+//     authDomain: "practicas-5bd5b.firebaseapp.com",
+//     databaseURL: "https://practicas-5bd5b.firebaseio.com",
+//     projectId: "practicas-5bd5b",
+//     storageBucket: "",
+//     messagingSenderId: "796645806481"
+//   };
+//   firebase.initializeApp(config);
+// </script>
 
-    var config = {
-    apiKey: "AIzaSyATFHPOvPIszswYY0tCgJ06rlyQ24WHDCA",
-    authDomain: "logistica-144918.firebaseapp.com",
-    databaseURL: "https://logistica-144918.firebaseio.com",
-    projectId: "logistica-144918",
-    storageBucket: "logistica-144918.appspot.com",
-    messagingSenderId: "378485183737"
+
+
+
+  //   var config = {
+  //   apiKey: "AIzaSyATFHPOvPIszswYY0tCgJ06rlyQ24WHDCA",
+  //   authDomain: "logistica-144918.firebaseapp.com",
+  //   databaseURL: "https://logistica-144918.firebaseio.com",
+  //   projectId: "logistica-144918",
+  //   storageBucket: "logistica-144918.appspot.com",
+  //   messagingSenderId: "378485183737"
+  // };
+
+  var config = {
+    apiKey: "AIzaSyDvIgZ8FpDoSTJuSbHl8VJH0zacuN4Z_Fk",
+    authDomain: "practicas-5bd5b.firebaseapp.com",
+    databaseURL: "https://practicas-5bd5b.firebaseio.com",
+    projectId: "practicas-5bd5b",
+    storageBucket: "",
+    messagingSenderId: "796645806481"
   };
 
   this.ref=firebase.initializeApp(config);
@@ -112,9 +137,14 @@ return storage.$getDownloadURL();
 
     this.getUser=function(){
         console.log('getUser');
+        console.log(self.user);
+          if(this.isUserLog){
+                    return localStorage.user;
+                  }
+                  else{
 
-      return   self.user;
-
+                return   self.user;
+          };
     };
 
     this.getEmpresaKey=function(){
@@ -138,6 +168,134 @@ if(localStorage.userKey&&localStorage.empresaKey)
        console.log('Is not log');
       return false;};
 };
+
+
+//  Firebase
+
+
+
+this.writePractica=function(userKey, model,propiedades) {
+  console.log('writePractica');
+  console.log(userKey);
+  // console.log(model);
+  console.log(propiedades);
+  // Get a key for a new Post.
+
+var misPracticasRef = firebase.database().ref('Mispracticas/' + userKey+"/lista");
+misPracticasRef.once('value', function(snapshotMisPracticas) {
+  console.log("snapshotMisPracticas");
+  console.log(snapshotMisPracticas);
+  var newPracticaKey = firebase.database().ref().child('practicas').push().key;
+  var a={practica:JSON.parse( model),Propiedades:propiedades};
+  firebase.database().ref('practicas/' + userKey+'/'+newPracticaKey). set(a).then(function(ret){
+
+    console.log("PromesaPractica");
+    console.log(ret);
+    console.log(snapshotMisPracticas)
+    var listaPracticas=[];
+    propiedades.userKey=userKey;
+    propiedades.practicasKey=newPracticaKey;
+    if(snapshotMisPracticas.hasChildren()){
+
+    console.log("snapshotMisPracticas tiene hijos ");
+    console.log(snapshotMisPracticas.val());
+    listaPracticas=snapshotMisPracticas.val().concat(propiedades);
+    }
+    else{
+      listaPracticas.push(propiedades);
+      console.log("snapshotMisPracticas sin hijos ");
+    }
+
+    console.log("listaPracticas");
+    console.log(listaPracticas);
+    firebase.database().ref('Mispracticas/' + userKey). set({lista:listaPracticas}).then(
+      function(a){
+        console.log("Escritura Mis Practicas");
+        console.log(a);
+      }
+      ).catch(function(error){
+        console.log("Error Escritura Mis Practicas");
+        console.log(error);
+      });
+  });
+
+});
+};
+
+// lleer Mis Practicas
+
+this.leerMisPracticas=function(userKey) {
+  console.log('leerMisPractica');
+  console.log(userKey);
+
+var misPracticasRef = firebase.database().ref('Mispracticas/' + userKey+"/lista");
+
+return new Promise(function (resolve, reject){
+    console.log("Construccion de la promesa leerMisPracticas");
+
+
+
+
+
+
+misPracticasRef.once('value', function(snapshotMisPracticas) {
+  console.log("snapshotMisPracticas");
+  console.log(snapshotMisPracticas);
+
+    if(snapshotMisPracticas.hasChildren()){
+
+    console.log("snapshotMisPracticas tiene hijos ");
+    console.log(snapshotMisPracticas.val());
+    resolve({ value: "fin leerMisPracticas con hijos", result: snapshotMisPracticas.val()});
+
+    }
+    else{
+    console.log("snapshotMisPracticas sin hijos ");
+
+     reject({ value: "fin leerMisPracticas sin hijos", result: null});
+
+    }
+});
+
+});
+};
+
+// lleer Mis Practicas
+
+this.leerUnaPractica=function(datosPractica) {
+  console.log('leerUnaPractica');
+  console.log(datosPractica);
+  var userKey=datosPractica.userKey;
+  var practicaKey=datosPractica.practicasKey;
+
+var practicasRef = firebase.database().ref('practicas/' + userKey+"/"+practicaKey+"/practica");
+
+return new Promise(function (resolve, reject){
+    console.log("Construccion de la promesa leerUNAPracticas");
+
+
+practicasRef.once('value', function(snapshotUnaPracticas) {
+  console.log("snapshotUnaPracticas");
+  console.log(snapshotUnaPracticas);
+
+    if(snapshotUnaPracticas.hasChildren()){
+
+    console.log("snapshotUnaPracticas tiene hijos ");
+    console.log(snapshotUnaPracticas.val());
+    resolve({ value: "fin leerUnaPracticas con hijos", result: snapshotUnaPracticas.val()});
+
+    }
+    else{
+    console.log("snapshotUnaPracticas sin hijos ");
+
+     reject({ value: "fin leerUnaPracticas sin hijos", result: null});
+
+    }
+});
+
+});
+};
+
 
 ////
 

@@ -15,7 +15,7 @@ angular.module('fbxApp')
   //     'Karma'
   //   ];
   // });
-  .controller("NestedListsDemoController", ['$scope','comandos','$uibModal',function($scope,comandos,$uibModal) {
+  .controller("NestedListsDemoController", ['$scope','comandos','$uibModal','fb',function($scope,comandos,$uibModal,fb) {
 
     console.log("NestedListsDemoController");
 
@@ -27,16 +27,18 @@ angular.module('fbxApp')
         templates: [
 
             {type: "container", id: 1, duracion:0, columns: [[]]},
-            {type: "bloque", id: 3, duracion:0, nombre:"nombre",columns: [[]]},         // bloque de actividades
-            {type: "spotify", id: 4,search: "track" , volumen:1,duracion:6000,numeroTracks:0, tracks:""  },        // Dipara musica de Spotify
-             {type: "item", id: 2},
+            {type: "bloque", id: 2, duracion:0, nombre:"nombre",columns: [[]]},         // bloque de actividades
+            {type: "spotify", id: 3,search: "track" , volumen:1,duracion:null,numeroTracks:0, tracks:[]  },        // Dipara musica de Spotify
+             {type: "item", id: 4},
             {type: "audio", id: 5, link:"",volumen:1,name:"" },          // Reporduce audio
             {type: "leer", id: 6, texto:"Texto de prueba"},           // Lee un texto
-            {type: "imagen", id: 7,link:"",name:""  },                           // Muestra Imagen
-            {type: "tick", id: 8, intervalo_ms: 1000, volumen:1,duracion:6000},       // activa el cuenta timpo
-            {type: "cronometro", id: 9, columns: [[], [], [], []]},      // permite medir mi tiempo.
-            {type: "registro", id: 10, columns: [[], [], [], []]}        // permite tomar registo de tiempo o cantidades...
+            {type: "escribir", id: 7, texto:"Texto en Pantalla"},           // Escribe un texto en Pantalla
+            {type: "imagen", id: 8,link:"",name:""  },                           // Muestra Imagen
+            {type: "tick", id: 9, intervalo_ms: 1000, volumen:1,duracion:6000},       // activa el cuenta timpo
+            {type: "cronometro", id: 10, columns: [[], [], [], []]},      // permite medir mi tiempo.
+            {type: "registro", id: 11, columns: [[], [], [], []]}        // permite tomar registo de tiempo o cantidades...
         ],
+        propiedades:{nombre: "nombre de la practica",descripcion:"description", UsuarioCreador: {},fechaCreacion:"",fechaModicicacion:[],publica:false,cantidadSegidores:0,calificacion:100,duracion:0},        // permite tomar registo de tiempo o cantidades...
         dropzones: {
             "A": [
                 {
@@ -167,9 +169,12 @@ console.log('calculoDeDuracion');
 console.log(obj);
 
 level=level || 0;
-let duracionBloque= 0; // Se ejecutan en paralelo Se guarda el máximo.
-let duracionContainer= 0; // Se serie en paralelo Se guarda la suma de de las duraciones.
-let objInterno=null;
+var duracionBloque= 0; // Se ejecutan en paralelo Se guarda el máximo.
+var duracionContainer= 0; // Se serie en paralelo Se guarda la suma de de las duraciones.
+var objInterno=null;
+
+// Si el objeto es tipo container o bloque asigno a ObjInterno las columnas para poder compartir el for al
+// igualar las estructuras de datos.
 
 switch(obj.type){
     case "container":
@@ -190,6 +195,11 @@ switch(obj.type){
 
           console.log("objInterno:");
           console.log(objInterno);
+
+// recorro el objeto y calculo la duración del bloque y del container.
+// asigno la duración total y retorno el objeto completo.
+
+
     for (var i=0;i<objInterno.length;i++){
       console.log("i :"+i);
       console.log(objInterno[i].type);
@@ -295,6 +305,9 @@ switch(obj.type){
 
 };
 
+
+// retorno el objeto completo para que con la recursividad se ajusten todas las duraciones.
+
 console.log("retorno:");
 console.log(obj);
 return obj;
@@ -307,7 +320,7 @@ return obj;
 var load=function(){
     console.log("load");
       console.log(comandos.getModelAsJason());
-if (!comandos.getModelAsJason){
+if (!comandos.getModelAsJason()){
     console.log("load undefined");
 
 }
@@ -327,7 +340,9 @@ load();
 
 $scope.save=function(){
     console.log("save");
+    console.log("save: "+fb.getUserKey());
     comandos.setModelAsJason($scope.modelAsJson);
+    fb.writePractica(fb.getUserKey(), $scope.modelAsJson, $scope.models.propiedades);
 };
 
   this.items = ['item1', 'item2', 'item3'];
@@ -1002,7 +1017,7 @@ this.buscarAlbumTracks=function(albumId){
   self.tracks=data.data.items;
   var duracion=0;
     for(var i = 0; i<data.data.items.length; i++ ) {
-    let track=data.data.items[i];
+    var track=data.data.items[i];
     duracion+=track.duration_ms;
   };
   self.tracks.duracionTotal_ms=duracion;
@@ -1020,8 +1035,8 @@ this.buscarPlayListTracks=function(ownerId,playListId){
     console.log(data);
     var duracion=0;
       for(var i = 0; i<data.data.items.length; i++ ) {
-      let track=data.data.items[i].track;
-      let t={
+      var track=data.data.items[i].track;
+      var t={
         "artist": track.artists[0].name,
         "trackId":track.id,
         "name": track.name,
@@ -1047,8 +1062,8 @@ this.buscarArtistTracks=function(artistId,CountryCode){
     console.log(data);
     var duracion=0;
       for(var i = 0; i<data.data.tracks.length; i++ ) {
-        let track=data.data.tracks[i];
-        let t={
+        var track=data.data.tracks[i];
+        var t={
         "artist": track.artists[0].name,
         "trackId":track.id,
         "name": track.name,
@@ -1073,9 +1088,9 @@ this.setTracks=function(data){
  console.log(data);
 var duracion=0;
     for(var i = 0; i<data.length; i++ ) {
-    let track=data[i];
+    var track=data[i];
 
-    let t={
+   var t={
     "artist": track.artists[0].name,
     "trackId":track.id,
     "name": track.name,

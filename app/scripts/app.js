@@ -13,7 +13,7 @@
 
   angular
   // .module('fbxApp', ['ui.router','firebase', 'ngStorage','spotify', 'angularAudioRecorder', 'ui.bootstrap', 'dndLists'])
-  .module('fbxApp', ['ui.router','firebase', 'ngStorage','spotify', 'angularAudioRecorder', 'dndLists','ui.bootstrap'])
+  .module('fbxApp', ['ui.router','firebase', 'ngStorage','spotify', 'angularAudioRecorder', 'dndLists','ui.bootstrap','angular-p5'])
   // .config(['recorderServiceProvider', function(recorderServiceProvider){
   //       //configure here
   //     }]);
@@ -68,12 +68,7 @@ $stateProvider
     controller:'MainCtrl as main'
 });
 
-$stateProvider
-.state('perfiles',{
-    url:'/perfiles',
-    templateUrl:'views/perfiles.html',
-    controller:'PerfilesCtrl as recordedInputa'
-});
+
 
 $stateProvider
 .state('productos',{
@@ -94,6 +89,21 @@ $stateProvider
     url:'/timeline',
     templateUrl:'views/timeline.html',
     controller:'DialogDemoCtrl'
+});
+
+$stateProvider
+.state('mispracticas',{
+    url:'/mispracticas',
+    templateUrl:'views/mispracticas.html',
+    controller:'MispracticasCtrl as mispracticas'
+});
+
+
+$stateProvider
+.state('nuevapractica',{
+    url:'/nuevapractica',
+    templateUrl:'views/nuevapractica.html',
+    controller:'NuevapracticasCtrl as nuevapractica'
 });
 
 $stateProvider

@@ -9,7 +9,7 @@
  */
 angular.module('fbxApp')
 
-  .controller('LoggerCtrl',['firebase','$state','fb','$localStorage', function (firebase,$state,fb,localStorage) {
+  .controller('LoggerCtrl',['firebase','$state','fb','$localStorage','$scope',function (firebase,$state,fb,localStorage,$scope) {
 
 // var ref = new Firebase("https://logistica-144918.firebaseio.com");
 // this.data = $firebaseObject(ref);
@@ -27,7 +27,7 @@ angular.module('fbxApp')
     // console.log(" firebaseOject: "+ $firebaseOject);
     // console.log(" firebaseArray: "+ $firebaseArray);
     // console.log(" firebaseAuth: "+ $firebaseAuth);
-    var err="";
+    $scope.err=null;
     var self=this;
 
   // var config = {
@@ -51,39 +51,8 @@ console.log(localStorage.empresaKey);
 console.log(localStorage.empresa);
 
 
-    this.play2 =function(){
-          console.log("play2()");
 
 
-
-
-var sound = new Howl({
-      src: ['juan.wav'],
-      format: ['wav'],
-      html5: true
-
-    });
-
-
-
-//     // Clear listener after first call.
-//   sound.once('load', function(){
-//         console.log("once..load");
-//         console.log(sound);
-//     sound.play();
-//   });
-
-// // Fires when the sound finishes playing.
-//     sound.on('end', function(){
-//       console.log('Finished!');
-//       sound.unload();
-//     });
-
-
-
-
-
-    };
 
  // console.log($state.current);
 
@@ -93,17 +62,27 @@ this.passwordLogin=function(email, password){
     console.log("email "+ email);
     console.log("password "+ password);
    if (fb.isUserLog()){
-       $state.go('productos');
+       $state.go('practica');
     }else {
 
+      if( !email) {
 
-    this.ref.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+        $scope.err = 'Please enter a email';
+
+      }
+      else if( !password) {
+
+        $scope.err = 'Passwords nullo';
+
+          };
+    fb.getRefFB().auth().signInWithEmailAndPassword(email, password).catch(function(error) {
   // Handle Errors here.
   var errorCode = error.code;
   var errorMessage = error.message;
-
+   $scope.$apply(function () {
   console.log("error: "+errorMessage);
-   self.err=errorMessage;
+   $scope.err=errorMessage;
+  });
   })
     .then(function(CallBackuser){
           console.log(CallBackuser);
@@ -112,7 +91,11 @@ this.passwordLogin=function(email, password){
     console.log("CallBackuser: "+CallBackuser.email);
     console.log("user mail: "+user.email);
     console.log("user uid: "+user.uid);
+    console.log(user);
     // console.log(user);
+
+      fb.setUserKey(user.uid);
+        fb.setUser(user.email);
         self.readUser(user.uid);
         self.readPerfil(user.uid);
   }
@@ -126,20 +109,25 @@ this.createAccount=function(email, password,confirm){
      console.log("email "+ email);
     console.log("password "+ password);
     console.log("confirm "+ confirm);
-self.err = null;
+// $scope.err = null;
+$scope.err = "crear cuenta";
       if( !password) {
-        self.err = 'Please enter a password';
+           $scope.$apply(function () {
+        $scope.err = 'Please enter a password';
+       } );
       }
       else if( password !== confirm ) {
-        self.err = 'Passwords do not match';
+        $scope.$apply(function () {
+        $scope.err = 'Passwords do not match';
+       } );
       }
       else {
-    this.ref.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+    fb.getRefFB().auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
           // Handle Errors here.
           var errorCode = error.code;
           var errorMessage = error.message;
           console.log("error: "+errorMessage);
-          self.err=errorMessage;
+          $scope.err="error: "+errorMessage;
           })
             .then(function(CallBackuser){
             console.log(CallBackuser);
@@ -169,19 +157,22 @@ self.err = null;
 this.loginFacebook=function(){
     console.log("clickFacebook ");
        if (fb.isUserLog()){
-       $state.go('productos');
+
+       $state.go('practica');
     }else {
     var provider = new firebase.auth.FacebookAuthProvider();
     provider.setCustomParameters({
           'display': 'popup'
         });
-        this.ref.auth().signInWithPopup(provider).then(function(result) {
+        fb.getRefFB().auth().signInWithPopup(provider).then(function(result) {
           // This gives you a Facebook Access Token. You can use it to access the Facebook API.
           var token = result.credential.accessToken;
           console.log("token: "+token);
           // The signed-in user info.
           var user = result.user;
           console.log("user: "+user);
+
+
           // ...
         })
         .catch(function(error) {
@@ -194,6 +185,7 @@ this.loginFacebook=function(){
           var credential = error.credential;
 
             console.log("error: "+errorMessage+"-"+email+credential);
+            $scope.err="error: "+errorMessage+"-"+email+credential;
           // ...
         });
       };
@@ -203,7 +195,7 @@ this.loginFacebook=function(){
 this.loginGoogle=function(){
     console.log("login Google ");
     if (fb.isUserLog()){
-       $state.go('productos');
+       $state.go('practica');
     }else {
 
     var provider =new firebase.auth.GoogleAuthProvider();
@@ -213,12 +205,16 @@ this.loginGoogle=function(){
         });
 
 
-      this.ref.auth().signInWithPopup(provider).then(function(result) {
+      fb.getRefFB().auth().signInWithPopup(provider).then(function(result) {
         // This gives you a Google Access Token. You can use it to access the Google API.
         var token = result.credential.accessToken;
         // The signed-in user info.
         var user = result.user;
         console.log("user: "+user.uid);
+        console.log(user);
+        fb.setUserKey(user.uid);
+        fb.setUser(user.displayName);
+
         self.readUser(user.uid);
 
 
@@ -232,7 +228,7 @@ this.loginGoogle=function(){
         // The firebase.auth.AuthCredential type that was used.
         var credential = error.credential;
           console.log("error: "+errorMessage+"-"+email+credential);
-
+      $scope.err="error: "+errorMessage+"-"+email+credential;
         // ...
       });
     };
@@ -249,10 +245,10 @@ ref.on('value', function(snapshot) {
   console.log("User");
   var u=snapshot.val()
   console.log(u);
-  fb.setUserKey(userID);
-  fb.setUser(u);
-
-  self.readUserEmpresa(userID);
+  // fb.setUserKey(userID);
+  // fb.setUser(u);
+$state.go('mispracticas');
+  // self.readUserEmpresa(userID);
 
   // updateStarCount(postElement, snapshot.val());
 });
@@ -282,7 +278,7 @@ this.readUserEmpresa=function(userID){
       var childData = childSnapshot.val();
       fb.setEmpresaKey(childKey);
       fb.setEmpresa(childData);
-          $state.go('productos');
+          $state.go('practica');
     });
  });
 }; //end readUserEmpresa

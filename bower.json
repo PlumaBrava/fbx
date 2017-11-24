@@ -11,15 +11,13 @@
     "angular-spotify": "^1.5.1",
     "angularAudioRecorder": "^1.4.1",
     "howler.js": "howler#^2.0.4",
-    "ui.bootstrap": "^2.5.0",
-    "angular-bootstrap": "^2.5.0",
     "angular-drag-and-drop-lists": "^2.1.0",
-    "mojs": "^0.288.2",
-    "angular-ui-bootstrap": "^2.5.1"
+    "p5.js": "p5js#^0.5.13",
+    "angular-p5": "C:\\Users\\perez.juan.jose\\Documents\\htmlCSS\\fbx\\angular-p5.js",
+    "angular-bootstrap1": "angular-bootstrap1#2.5.0"
   },
   "devDependencies": {
-    "angular-mocks": "^1.4.0",
-    "angular-bootstrap": "^2.5.0"
+    "angular-mocks": "^1.4.0"
   },
   "appPath": "app",
   "moduleName": "fbxApp",
@@ -31,5 +29,6 @@
         "dist/js/bootstrap.js"
       ]
     }
+
   }
 }

@@ -1,4 +1,4 @@
- <script src="scripts/p5/p5.js"></script>
+ <!-- <script src="scripts/p5/p5.js"></script> -->
  <script src="scripts/p5/p5_practica.js"></script>
 <p>This is the practica view.</p>
 
@@ -11,7 +11,25 @@
               <li ng-click="execute()" >
                 <button type="button" class="btn btn-default btn-lg" >Ejecutar</button>
             </li>
+            <li ng-click="pausa1()" >
+                <button type="button" class="btn btn-default btn-lg" >Pausa</button>
+            </li>
+            <li ng-click="stop1()" >
+                <button type="button" class="btn btn-default btn-lg" >Stop</button>
+            </li>
         </ul>
     </div>
 </div>
+ <div class="progress">
+    <div class="progress-bar" role="progressbar" aria-valuenow="{{pantalla.avance}}" aria-valuemin="0" aria-valuemax="100" style="width:{{pantalla.avance}}%">
+      <span class="sr-only">{{pantalla.avance}}% Complete</span>
+    </div>
+  </div>
+<div>
+<img class="img-rounded" width="304" height="236" ng-src="{{pantalla.imagen}}" alt="Sin Imagen"/><br/>
+</div>
+<div>
+{{pantalla.texto}}<br/>
+</div>
+
 <div id='myContainer'></div>
